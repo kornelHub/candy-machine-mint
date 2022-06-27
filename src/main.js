@@ -131,12 +131,17 @@ const addMetadata = (_dna, _edition) => {
     name: `${namePrefix} #${_edition}`,
     description: description,
     image: `${baseUri}/${_edition}.png`,
+    creators: [
+      {
+      address: "0xbcd4042de499d14e55001ccbb24a551f3b954096",
+      share: 100 ,
+    }
+  ],
+
     dna: sha1(_dna),
     edition: _edition,
-    date: dateTime,
     ...extraMetadata,
     attributes: attributesList,
-    compiler: "HashLips Art Engine",
   };
   if (network == NETWORK.sol) {
     tempMetadata = {
@@ -307,6 +312,8 @@ const saveMetaDataSingleFile = (_editionCount) => {
         `Writing metadata for ${_editionCount}: ${JSON.stringify(metadata)}`
       )
     : null;
+  delete metadata['dna'];
+  delete metadata['edition'];
   fs.writeFileSync(
     `${buildDir}/json/${_editionCount}.json`,
     JSON.stringify(metadata, null, 2)
@@ -333,7 +340,8 @@ const startCreating = async () => {
   let failedCount = 0;
   let abstractedIndexes = [];
   for (
-    let i = network == NETWORK.sol ? 0 : 1;
+    // let i 
+    let i = 0;
     i <= layerConfigurations[layerConfigurations.length - 1].growEditionSizeTo;
     i++
   ) {
